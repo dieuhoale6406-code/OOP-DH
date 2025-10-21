@@ -5,6 +5,7 @@ class Lecturer : public Person {
         String LecturerID;
         String rank;
         static bool is_space(char);
+
     public:
         Lecturer();
         Lecturer(const String&, int, const String&, bool, const String&);

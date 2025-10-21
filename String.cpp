@@ -4,9 +4,7 @@ using namespace std;
 
 unsigned int String::strlen(const char* str) {
     unsigned int len = 0;
-    while (str[len] != '\0') {
-        len++;
-    }
+    while (str[len] != '\0') len++;
     return len;
 }
 
@@ -31,7 +29,7 @@ int String::strcmp(const char* s1, const char* s2) {
     unsigned int i = 0;
     while (s1[i] && s2[i]){
         if (s1[i] != s2[i]) return (unsigned char)s1[i] < (unsigned char)s2[i] ? -1 : 1;
-        ++i;
+        i++;
     }
     if (s1[i] == s2[i]) return 0;
     return s1[i] ? 1 : -1;
@@ -44,10 +42,8 @@ String::String(const String& str)
         strcpy(this->data,str.data);
 }
 
-String::String(const char* str)
-    : len(strlen(str)), data(new char[len + 1]) {
-        strcpy(this->data, str);
-        //  strcpy(this->data, str ? str : "");
+String::String(const char* str) : len(strlen(str)), data(new char[len + 1]) {
+        strcpy(this->data, str ? str : "");
 }
 
 String::~String() {
@@ -88,29 +84,29 @@ const char& String::operator[](unsigned int i) const {
     return *(this->data + i);
 }
 
-// bool String::operator==(const String& str) const {
-//     return strcmp(this->data, str.data) == 0;
-// }
+bool String::operator==(const String& str) const {
+    return strcmp(this->data, str.data) == 0;
+}
 
-// bool String::operator!=(const String& str) const {
-//     return !(*this == str);
-// }
+bool String::operator!=(const String& str) const {
+    return !(*this == str);
+}
 
-// bool String::operator<(const String& str) const {
-//     return strcmp(this->data, str.data) < 0;
-// }
+bool String::operator<(const String& str) const {
+    return strcmp(this->data, str.data) < 0;
+}
 
-// bool String::operator>(const String& str) const {
-//     return strcmp(this->data, str.data) > 0;
-// }
+bool String::operator>(const String& str) const {
+    return strcmp(this->data, str.data) > 0;
+}
 
-// bool String::operator<=(const String& str) const {
-//     return !(*this > str);
-// }
+bool String::operator<=(const String& str) const {
+    return !(*this > str);
+}
 
-// bool String::operator>=(const String& str) const {
-//     return !(*this < str);
-// }
+bool String::operator>=(const String& str) const {
+    return !(*this < str);
+}
 
 ostream& operator<<(std::ostream& o, const String& str) {
     o << str.data;
@@ -119,6 +115,9 @@ ostream& operator<<(std::ostream& o, const String& str) {
 
 istream& operator>>(std::istream& in, String& str) {
     char buffer[1000];
+    if (in.peek() == '\n') {
+        in.ignore();
+    }
     in.getline(buffer,1000);
     str = String(buffer);
     return in;

@@ -39,7 +39,7 @@ void Person::setGender(bool gender){
 }
 
 void Person::show() const{
-    cout << "Person" << (gender ? "Mr. " : "Ms. ") << name << ", " << age << ", " << address << endl;
+    cout << "Person: " << (gender ? "Mr. " : "Ms. ") << name << ", " << age << ", " << address << endl;
 }
 
 ostream& operator<<(ostream& os, const Person& p) {
@@ -51,13 +51,14 @@ ostream& operator<<(ostream& os, const Person& p) {
 }
 
 istream& operator>>(istream& is, Person& p) {
-    cout << "Nhap ho ten: ";
+    cout << "Nhap ho ten: ";    
     is >> p.name;
     cout << "Nhap tuoi: ";
     is >> p.age;
     cout << "Nhap dia chi: ";
     is >> p.address;
-    cout << "Nhap gioi tinh (1 cho Nam, 0 cho Nu): ";
+    cout << "Nhap gioi tinh (Nu: 0, Nam: 1): ";
     is >> p.gender;
+    is.ignore(1000,'\n');
     return is;
 }

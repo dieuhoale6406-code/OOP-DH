@@ -1,6 +1,8 @@
 #pragma once
 #include "String.h"
 
+using namespace std;
+
 class Person {
     protected:
         String name;
@@ -8,7 +10,7 @@ class Person {
         String address;
         bool gender;
     public:
-        Person(const String& = "",int = 0,const String& = "",bool = true);
+        Person(const String& = "",int = 0,const String& = "", bool = true);
         ~Person();
 
         const String& getName() const;
@@ -23,6 +25,6 @@ class Person {
 
         virtual void show() const;
 
-        friend std::ostream& operator<<(std::ostream&, const Person&);
-        friend std::istream& operator>>(std::istream&, Person&);
+        friend ostream& operator<<(ostream&, const Person&);
+        friend istream& operator>>(istream&, Person&);
 };

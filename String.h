@@ -21,15 +21,16 @@ class String {
         String& operator=(const String&);
         String& operator+=(const String&);
         String operator+(const String&) const;
+        
         char& operator[](unsigned int);
         const char& operator[](unsigned int) const;
 
-        // bool operator==(const String&) const;
-        // bool operator!=(const String&) const;
-        // bool operator<(const String&) const;
-        // bool operator>(const String&) const;
-        // bool operator<=(const String&) const;
-        // bool operator>=(const String&) const;
+        bool operator==(const String&) const;
+        bool operator!=(const String&) const;
+        bool operator<(const String&) const;
+        bool operator>(const String&) const;
+        bool operator<=(const String&) const;
+        bool operator>=(const String&) const;
 
         friend ostream& operator<<(ostream&,const String&);
         friend istream& operator>>(istream&, String&);

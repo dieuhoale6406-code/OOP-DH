@@ -1,17 +1,15 @@
 #include "ClassSH.h"
-#include "SinhVien.h" // Giả định file header của SinhVien
+#include "SinhVien.h"
 #include <iostream>
 
 using namespace std;
 
-void ClassSH::ensure(int required) {
-    if (capacity >= required) {
+void ClassSH::ensure(int req) {
+    if (capacity >= req) {
         return;
     }
     int newCapacity = (capacity == 0) ? 15 : capacity * 2;
-    if (newCapacity < required) {
-        newCapacity = required;
-    }
+    if (newCapacity < req) newCapacity = req;
 
     SinhVien* newSinhVien = new SinhVien[newCapacity];
 
@@ -25,19 +23,18 @@ void ClassSH::ensure(int required) {
     capacity = newCapacity;
 }
 
-ClassSH::ClassSH() : classname(""), MainLecturer() {}
+ClassSH::ClassSH(): classname(""), MainLecturer(), sinhvien(nullptr), SiSo(0), capacity(0) {}
 
-ClassSH::ClassSH(const String& name, const Lecturer& gv)
-    : classname(name), MainLecturer(gv), SiSo(0), capacity(15) {
+ClassSH::ClassSH(const String& name, const Lecturer& lecturer)
+    : classname(name), MainLecturer(lecturer), sinhvien(nullptr), SiSo(0), capacity(15) {
     sinhvien = new SinhVien[capacity];
 }
 
-ClassSH::ClassSH(const ClassSH& other)
-    : classname(other.classname), MainLecturer(other.MainLecturer), SiSo(other.SiSo), capacity(other.capacity) {
+ClassSH::ClassSH(const ClassSH& Class)
+    : classname(Class.classname), MainLecturer(Class.MainLecturer), sinhvien(nullptr), SiSo(Class.SiSo), capacity(Class.capacity) {
     sinhvien = new SinhVien[capacity];
-    for (int i = 0; i < SiSo; ++i) {
-        sinhvien[i] = other.sinhvien[i];
-    }
+    for (int i = 0; i < SiSo; ++i)
+        sinhvien[i] = Class.sinhvien[i];
 }
 
 ClassSH::~ClassSH() {
@@ -62,11 +59,11 @@ void ClassSH::setClassName(const String& name) {
     classname = name;
 }
 
-void ClassSH::setLecturer(const Lecturer& gv) {
-    MainLecturer = gv;
+void ClassSH::setLecturer(const Lecturer& lecturer) {
+    MainLecturer = lecturer;
 }
 
-bool ClassSH::add(SinhVien& sv) {
+bool ClassSH::add(const SinhVien& sv) {
     if (find(sv.getId()) != nullptr) {
         return false;
     }
@@ -89,10 +86,8 @@ bool ClassSH::remove(const String& sinhVienID) {
         return false;
     }
 
-    for (int i = pos; i < --SiSo; ++i) {
-        sinhvien[i] = sinhvien[i + 1];
-    }
-
+    for (int i = pos + 1; i < SiSo; ++i) sinhvien[i - 1] = sinhvien[i];
+    SiSo--;
     return true;
 }
 
@@ -114,32 +109,29 @@ const SinhVien* ClassSH::find(const String& sinhVienID) const {
     return nullptr;
 }
 
-SinhVien& ClassSH::operator[](int idx) {
-    return sinhvien[idx];
+SinhVien& ClassSH::operator[](int pos) {
+    return sinhvien[pos];
 }
 
-const SinhVien& ClassSH::operator[](int idx) const {
-    return sinhvien[idx];
+const SinhVien& ClassSH::operator[](int pos) const {
+    return sinhvien[pos];
 }
 
-ClassSH& ClassSH::operator=(const ClassSH& other) {
-    if (this == &other) {
-        return *this;
-    }
+ClassSH& ClassSH::operator=(const ClassSH& Class) {
+    if (this == &Class) return *this;
 
     delete[] sinhvien;
-
-    classname = other.classname;
-    MainLecturer = other.MainLecturer;
-    SiSo = other.SiSo;
-    capacity = other.capacity;
+    classname = Class.classname;
+    MainLecturer = Class.MainLecturer;
+    SiSo = Class.SiSo;
+    capacity = Class.capacity;
 
     sinhvien = new SinhVien[capacity];
-    for (int i = 0; i < SiSo; ++i) sinhvien[i] = other.sinhvien[i];
+    for (int i = 0; i < SiSo; ++i) sinhvien[i] = Class.sinhvien[i];
     return *this;
 }
 
-ostream& operator<<(ostream& os, const ClassSH& L) {
+std::ostream& operator<<(std::ostream& os, const ClassSH& L) {
     os << "Ten lop: " << L.classname << endl;
     os << "Giang vien phu trach: " << L.MainLecturer.getName() << endl;
     os << "Si so: " << L.SiSo << endl;
@@ -153,26 +145,23 @@ ostream& operator<<(ostream& os, const ClassSH& L) {
 istream& operator>>(istream& is, ClassSH& L) {
     cout << "Nhap ten lop: ";
     is >> L.classname;
-    cout << "Nhap thong tin giang vien phu trach:\n";
+    cout << "Nhap thong tin giang vien phu trach: " << endl;
     is >> L.MainLecturer;
 
-    // Xóa danh sách sinh viên cũ trước khi nhập mới
-    L.SiSo = 0; 
-    
+    L.SiSo = 0;
+
     int n;
     cout << "Nhap so luong sinh vien: ";
     is >> n;
-    
-    // Đảm bảo có đủ chỗ
+
     L.ensure(n);
 
     cout << "Nhap danh sach sinh vien:\n";
     for (int i = 0; i < n; ++i) {
-        cout << "Nhap thong tin sinh vien thu " << i + 1 << ":\n";
+        cout << "Nhap thong tin sinh vien thu " << i + 1 << ": " << endl;
         SinhVien sv_temp;
         is >> sv_temp;
         L.add(sv_temp);
     }
-    
     return is;
 }

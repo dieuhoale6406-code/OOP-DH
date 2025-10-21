@@ -1,5 +1,4 @@
 #pragma once
-
 #include "String.h"
 #include "Lecturer.h"
 
@@ -11,14 +10,15 @@ class ClassSH {
         String classname;
         Lecturer MainLecturer;
         SinhVien* sinhvien;
-        int SiSo;
+        unsigned int SiSo;
         int capacity;
         void ensure(int);
     public:
         ClassSH();
-        ClassSH(const String&,const Lecturer&);
+        ClassSH(const String&, const Lecturer&);
         ClassSH(const ClassSH&);
         ~ClassSH();
+
         const String& getClassName() const;
         const Lecturer& getLecturer() const;
         int getSiSo() const;
@@ -26,7 +26,7 @@ class ClassSH {
         void setClassName(const String&);
         void setLecturer(const Lecturer&);
 
-        bool add(SinhVien&);
+        bool add(const SinhVien&);
         bool remove(const String&);
         SinhVien* find(const String&);
         const SinhVien* find(const String&) const;
